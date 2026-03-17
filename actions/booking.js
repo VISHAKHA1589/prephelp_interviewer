@@ -2,7 +2,7 @@
 
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "@/lib/prisma";
-// import { StreamClient } from "@stream-io/node-sdk";
+import { StreamClient } from "@stream-io/node-sdk";
 import { revalidatePath } from "next/cache";
 
 export const getInterviewerProfile = async (interviewerId) => {
@@ -71,36 +71,57 @@ export const bookSlot = async ({ interviewerId, startTime, endTime }) => {
 
   // Create Stream call
   let streamCallId;
-  //   try {
-  //     const streamClient = new StreamClient(
-  //       process.env.NEXT_PUBLIC_STREAM_API_KEY,
-  //       process.env.STREAM_SECRET_KEY
-  //     );
-  //     streamCallId = `mock_${Date.now()}_${Math.random()
-  //       .toString(36)
-  //       .slice(2, 7)}`;
-  //     const call = streamClient.video.call("default", streamCallId);
-  //     await call.create({
-  //       data: {
-  //         created_by_id: dbUser.clerkUserId,
-  //         members: [
-  //           { user_id: dbUser.clerkUserId, role: "host" },
-  //           { user_id: interviewer.clerkUserId, role: "host" },
-  //         ],
-  //         settings_override: {
-  //           recording: { mode: "available" },
-  //           screensharing: { mode: "available" },
-  //         },
-  //       },
-  //     });
-  //   } catch (err) {
-  //     console.error("Stream call creation failed:", err);
-  //     return { error: "Failed to create video call. Please try again." };
-  //   }
+  try {
+    const streamClient = new StreamClient(
+      process.env.NEXT_PUBLIC_STREAM_API_KEY,
+      process.env.STREAM_SECRET_KEY
+    );
+
+    // Stream requires users to exist before being added to a call
+    await streamClient.upsertUsers([
+      {
+        id: dbUser.clerkUserId,
+        name: dbUser.name ?? "Interviewee",
+        image: dbUser.imageUrl ?? undefined,
+        role: "user",
+      },
+      {
+        id: interviewer.clerkUserId,
+        name: interviewer.name ?? "Interviewer",
+        image: interviewer.imageUrl ?? undefined,
+        role: "user",
+      },
+    ]);
+
+    streamCallId = `mock_${Date.now()}_${Math.random()
+      .toString(36)
+      .slice(2, 7)}`;
+
+    const call = streamClient.video.call("default", streamCallId);
+
+    await call.getOrCreate({
+      data: {
+        created_by_id: dbUser.clerkUserId,
+        members: [
+          { user_id: dbUser.clerkUserId, role: "host" },
+          { user_id: interviewer.clerkUserId, role: "host" },
+        ],
+        settings_override: {
+          recording: { mode: "available", quality: "1080p" },
+          screensharing: {
+            mode: "available",
+            target_resolution: { width: 1920, height: 1080 },
+          },
+        },
+      },
+    });
+  } catch (err) {
+    console.error("Stream call creation failed:", err);
+    return { error: "Failed to create video call. Please try again." };
+  }
 
   try {
     const booking = await db.$transaction(async (tx) => {
-      // Create booking
       const newBooking = await tx.booking.create({
         data: {
           intervieweeId: dbUser.id,
@@ -113,7 +134,6 @@ export const bookSlot = async ({ interviewerId, startTime, endTime }) => {
         },
       });
 
-      // Single credit transaction (deduction from interviewee)
       await tx.creditTransaction.create({
         data: {
           userId: dbUser.id,
@@ -123,7 +143,6 @@ export const bookSlot = async ({ interviewerId, startTime, endTime }) => {
         },
       });
 
-      // Deduct from interviewee, add to interviewer balance
       await tx.user.update({
         where: { id: dbUser.id },
         data: { credits: { decrement: credits } },

@@ -1,5 +1,3 @@
-"use client";
-
 import { CodeDemo } from "@/components/demo-components-animate-code";
 import { StarsBackgroundDemo } from "@/components/demo-components-backgrounds-stars";
 import { AI_TAGS, AVATARS, LOGOS, PLANS, ROLES, SLOTS } from "@/lib/data";
@@ -14,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
+import PricingSection from "@/components/PricingSection";
 
 function MockUI({ rows = 3 }) {
   const widths = ["w-4/5", "w-3/5", "w-2/5", "w-4/5", "w-1/2"];
@@ -63,7 +62,7 @@ function BentoCard({ icon, title, desc, children, className = "" }) {
 
 export default function LandingPage() {
   return (
-    <div className="bg-[#0a0a0b] overflow-x-hidden">
+    <div className="bg-black overflow-x-hidden">
       {/* ── HERO ── */}
       <section className="relative min-h-screen grid grid-cols-5 px-6 pt-36 pb-24 overflow-hidden">
         <StarsBackgroundDemo />
@@ -310,58 +309,7 @@ export default function LandingPage() {
             Each credit = one session. Unused credits roll over. Cancel anytime.
           </p>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {PLANS.map((plan) => (
-            <div
-              key={plan.name}
-              className={`relative rounded-2xl p-10 h-full flex flex-col transition-all duration-300 hover:-translate-y-1 ${
-                plan.featured
-                  ? "bg-[#141417] border border-amber-400/20"
-                  : "bg-[#0f0f11] border border-white/10 hover:border-amber-400/10"
-              }`}
-            >
-              {plan.featured && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-400 text-[#0a0a0b] text-xs font-bold tracking-wide uppercase px-3.5 py-1 rounded-full whitespace-nowrap">
-                  Most Popular
-                </span>
-              )}
-              <p className="text-xs font-semibold text-stone-500 tracking-widest uppercase mb-5">
-                {plan.name}
-              </p>
-              <div className="flex items-end gap-1 mb-1.5">
-                <span
-                  className={`font-serif text-5xl leading-none tracking-tight ${
-                    plan.featured
-                      ? "bg-linear-to-br from-amber-300 to-amber-500 bg-clip-text text-transparent"
-                      : "bg-linear-to-br from-stone-100 to-stone-400 bg-clip-text text-transparent"
-                  }`}
-                >
-                  {plan.price}
-                </span>
-                <span className="text-sm text-stone-500 font-light mb-1.5">
-                  /month
-                </span>
-              </div>
-              <p className="text-sm text-amber-400 mb-7">{plan.credits}</p>
-              <div className="h-px bg-white/10 mb-7" />
-              <ul className="space-y-3 mb-9 flex-1">
-                {plan.features.map((f) => (
-                  <li
-                    key={f}
-                    className="flex items-start gap-2.5 text-sm text-stone-400"
-                  >
-                    <span className="text-amber-400 text-xs mt-0.5">✓</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <Button variant={plan.featured ? "gold" : "outline"}>
-                Get started
-              </Button>
-            </div>
-          ))}
-        </div>
+        <PricingSection />
       </section>
 
       {/* ── CTA ── */}

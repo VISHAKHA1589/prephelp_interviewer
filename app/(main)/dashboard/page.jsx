@@ -1,11 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/prisma";
-import PageHeader, {
-  GoldTitle,
-  GrayTitle,
-  SectionLabel,
-} from "@/components/reusables";
+import PageHeader from "@/components/reusables";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   getAvailability,
@@ -46,7 +42,7 @@ export default async function InterviewerDashboardPage() {
     ]);
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-black">
       {/* Page header */}
       <PageHeader
         label="Interviewer dashboard"
@@ -68,27 +64,27 @@ export default async function InterviewerDashboardPage() {
       />
 
       {/* Tabbed content */}
-      <div className="max-w-5xl mx-auto px-8 py-10">
+      <div className="max-w-6xl mx-auto px-8 py-10">
         <Tabs defaultValue="availability">
           <TabsList className="bg-[#0f0f11] border border-white/10 mb-8 w-full">
-            <TabsTrigger value="availability" className="p-5">
-              <Clock size={18} className="text-amber-400" /> Availability
+            <TabsTrigger value="earnings" className="p-5">
+              <Wallet size={16} className="text-amber-400" /> Earnings
             </TabsTrigger>
             <TabsTrigger value="appointments" className="p-5">
               <ClipboardList size={18} className="text-amber-400" />{" "}
               Appointments
             </TabsTrigger>
-            <TabsTrigger value="earnings" className="p-5">
-              <Wallet size={16} className="text-amber-400" /> Earnings
+            <TabsTrigger value="availability" className="p-5">
+              <Clock size={18} className="text-amber-400" /> Availability
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="availability">
-            <AvailabilitySection initial={availability} />
-          </TabsContent>
-
           <TabsContent value="appointments">
             <AppointmentsSection appointments={appointments} />
+          </TabsContent>
+
+          <TabsContent value="availability">
+            <AvailabilitySection initial={availability} />
           </TabsContent>
 
           <TabsContent value="earnings">

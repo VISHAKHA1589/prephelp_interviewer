@@ -1,0 +1,229 @@
+"use client";
+
+import Link from "next/link";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Calendar, Clock, Video } from "lucide-react";
+
+const STATUS_STYLES = {
+  SCHEDULED: "border-blue-500/20 bg-blue-500/10 text-blue-400",
+  COMPLETED: "border-green-500/20 bg-green-500/10 text-green-400",
+  CANCELLED: "border-red-500/20 bg-red-500/10 text-red-400",
+};
+
+const RATING_STYLES = {
+  POOR: "border-red-500/20 bg-red-500/10 text-red-400",
+  AVERAGE: "border-yellow-500/20 bg-yellow-500/10 text-yellow-400",
+  GOOD: "border-blue-500/20 bg-blue-500/10 text-blue-400",
+  EXCELLENT: "border-green-500/20 bg-green-500/10 text-green-400",
+};
+
+const RATING_LABEL = {
+  POOR: "Poor",
+  AVERAGE: "Average",
+  GOOD: "Good",
+  EXCELLENT: "Excellent",
+};
+
+function formatDate(iso) {
+  return new Date(iso).toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function formatTime(iso) {
+  return new Date(iso).toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
+
+function formatDuration(start, end) {
+  const diff = (new Date(end) - new Date(start)) / 60000;
+  const h = Math.floor(diff / 60);
+  const m = diff % 60;
+  return h > 0 ? `${h}h${m > 0 ? ` ${m}m` : ""}` : `${m}m`;
+}
+
+// mode="interviewer" → person is the interviewee they interviewed
+// mode="interviewee" → person is the interviewer they booked
+export function AppointmentCard({ booking, mode }) {
+  const {
+    startTime,
+    endTime,
+    status,
+    creditsCharged,
+    streamCallId,
+    recordingUrl,
+    feedback,
+  } = booking;
+
+  const person =
+    mode === "interviewer" ? booking.interviewee : booking.interviewer;
+
+  const creditsLabel =
+    mode === "interviewer"
+      ? `+${creditsCharged} credits earned`
+      : `−${creditsCharged} credits`;
+
+  const creditsStyle =
+    mode === "interviewer"
+      ? "border-green-500/20 bg-green-500/10 text-green-400"
+      : "border-amber-400/20 bg-amber-400/5 text-amber-400";
+
+  const isUpcoming = status === "SCHEDULED";
+
+  return (
+    <article className="group relative bg-[#0f0f11] border border-white/10 transition-all duration-300 hover:-translate-y-0.5 rounded-2xl overflow-hidden  bg-linear-to-t from-transparent  via-transparent to-amber-300/10">
+      <div className="p-7 flex flex-col gap-6">
+        {/* ── Row 1: Person identity + status badges ── */}
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-center gap-4 min-w-0">
+            <Avatar className="w-14 h-14 border border-white/10 rounded-2xl shrink-0">
+              <AvatarImage
+                src={person?.imageUrl}
+                alt={person?.name}
+                className="rounded-2xl"
+              />
+              <AvatarFallback className="rounded-2xl bg-amber-400/10 border border-amber-400/20 text-amber-400 text-lg font-medium">
+                {person?.name?.[0] ?? "?"}
+              </AvatarFallback>
+            </Avatar>
+
+            <div className="flex flex-col gap-1 min-w-0">
+              <p className="text-base font-medium text-stone-200 leading-tight truncate">
+                {person?.name ?? "—"}
+              </p>
+              {person?.title && person?.company ? (
+                <p className="text-xs text-stone-500 truncate">
+                  {person.title}
+                  <span className="text-stone-700 mx-1.5">·</span>
+                  {person.company}
+                </p>
+              ) : (
+                <p className="text-xs text-stone-600 truncate">
+                  {person?.email}
+                </p>
+              )}
+              {mode === "interviewee" && person?.categories?.length > 0 && (
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {person.categories.slice(0, 3).map((cat) => (
+                    <span
+                      key={cat}
+                      className="text-[10px] px-2 py-0.5 rounded-md border border-amber-400/20 bg-amber-400/5 text-amber-400 leading-tight"
+                    >
+                      {cat.replace("_", " ")}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col items-end gap-2 shrink-0">
+            <Badge variant="outline" className={STATUS_STYLES[status]}>
+              {status.charAt(0) + status.slice(1).toLowerCase()}
+            </Badge>
+            <Badge variant="outline" className={creditsStyle}>
+              {creditsLabel}
+            </Badge>
+          </div>
+        </div>
+
+        {/* ── Divider ── */}
+        <div className="h-px bg-white/5" />
+
+        {/* ── Row 2: Date + time + duration ── */}
+        <div className="grid grid-cols-3 gap-4">
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center gap-1.5 text-stone-600">
+              <Calendar size={12} />
+              <span className="text-[10px] font-semibold tracking-widest uppercase">
+                Date
+              </span>
+            </div>
+            <p className="text-sm text-stone-300">{formatDate(startTime)}</p>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center gap-1.5 text-stone-600">
+              <Clock size={12} />
+              <span className="text-[10px] font-semibold tracking-widest uppercase">
+                Time
+              </span>
+            </div>
+            <p className="text-sm text-stone-300">
+              {formatTime(startTime)}
+              <span className="text-stone-600 mx-1">–</span>
+              {formatTime(endTime)}
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center gap-1.5 text-stone-600">
+              <Video size={12} />
+              <span className="text-[10px] font-semibold tracking-widest uppercase">
+                Duration
+              </span>
+            </div>
+            <p className="text-sm text-stone-300">
+              {formatDuration(startTime, endTime)}
+            </p>
+          </div>
+        </div>
+
+        {/* ── Row 3: AI Feedback summary snippet (if exists) ── */}
+        {feedback?.summary && (
+          <div className="rounded-xl border border-white/8 bg-[#141417] px-4 py-3 flex flex-col gap-1.5">
+            <p className="text-[10px] font-semibold text-stone-600 tracking-widest uppercase">
+              AI Feedback
+            </p>
+            <p className="text-xs text-stone-400 font-light leading-relaxed line-clamp-2">
+              {feedback.summary}
+            </p>
+          </div>
+        )}
+
+        {/* ── Row 4: Action bar ── */}
+        {(streamCallId || recordingUrl || feedback) && (
+          <div className="flex items-center gap-2 flex-wrap pt-1">
+            {streamCallId && isUpcoming && (
+              <Button variant="gold" size="sm" className="gap-2" asChild>
+                <Link href={`/call/${streamCallId}`}>
+                  <Video size={13} />
+                  Join call
+                </Link>
+              </Button>
+            )}
+
+            {recordingUrl && (
+              <Button variant="outline" size="sm" className="gap-2" asChild>
+                <a
+                  href={recordingUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  📹 Recording
+                </a>
+              </Button>
+            )}
+
+            {feedback && (
+              <Badge
+                variant="outline"
+                className={RATING_STYLES[feedback.overallRating]}
+              >
+                ✦ {RATING_LABEL[feedback.overallRating]} performance
+              </Badge>
+            )}
+          </div>
+        )}
+      </div>
+    </article>
+  );
+}

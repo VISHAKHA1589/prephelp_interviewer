@@ -20,7 +20,7 @@ const CATEGORY_LABEL = {
 };
 
 const EXPECT_ITEMS = [
-  ["🎥", "HD Video Call", "60-minute session with screen sharing built in."],
+  ["🎥", "HD Video Call", "45-minute session with screen sharing built in."],
   [
     "🤖",
     "AI Question Generator",
@@ -61,7 +61,7 @@ export default async function InterviewerProfilePage({ params }) {
   if (!interviewer) notFound();
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-black">
       {/* ── Hero identity banner ── */}
       <section className="relative border-b border-white/8 overflow-hidden">
         <div className="absolute inset-0 -z-10">

@@ -48,12 +48,7 @@ const ROLES = [
 export default function OnboardingPage() {
   const router = useRouter();
 
-  const {
-    data,
-    loading,
-    error,
-    fn: onboardingFn,
-  } = useFetch(completeOnboarding);
+  const { data, loading, fn: onboardingFn } = useFetch(completeOnboarding);
 
   const [role, setRole] = useState(null);
   const [form, setForm] = useState({
@@ -105,7 +100,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <main className="min-h-screen px-6 py-24 flex flex-col items-center">
+    <main className="min-h-screen bg-black px-6 py-24 flex flex-col items-center">
       <div className="w-full max-w-2xl">
         {/* Heading */}
         <div className="text-center mb-10">

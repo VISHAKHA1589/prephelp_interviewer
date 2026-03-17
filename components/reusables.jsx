@@ -30,12 +30,12 @@ export default function PageHeader({ label, gray, gold, description, right }) {
       <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
         <div>
           {label && <SectionLabel>{label}</SectionLabel>}
-          <h1 className="font-serif text-3xl tracking-tight mt-1">
+          <h1 className="font-serif text-5xl tracking-tight mt-1">
             {gray && <GrayTitle>{gray} </GrayTitle>}
             {gold && <GoldTitle>{gold}</GoldTitle>}
           </h1>
           {description && (
-            <p className="text-xs text-stone-500 font-light mt-2">
+            <p className="text-sm text-stone-500 font-light mt-2">
               {description}
             </p>
           )}
