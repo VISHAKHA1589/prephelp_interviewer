@@ -62,8 +62,8 @@ const Header = async () => {
             role={user?.role === "INTERVIEWER" ? "INTERVIEWER" : "INTERVIEWEE"}
             credits={
               (user?.role === "INTERVIEWER"
-                ? user.creditBalance
-                : user.credits) ?? 0
+                ? user?.creditBalance
+                : user?.credits) ?? 0
             }
           />
 

@@ -65,7 +65,7 @@ export default async function InterviewerDashboardPage() {
 
       {/* Tabbed content */}
       <div className="max-w-6xl mx-auto px-8 py-10">
-        <Tabs defaultValue="availability">
+        <Tabs defaultValue="earnings">
           <TabsList className="bg-[#0f0f11] border border-white/10 mb-8 w-full">
             <TabsTrigger value="earnings" className="p-5">
               <Wallet size={16} className="text-amber-400" /> Earnings

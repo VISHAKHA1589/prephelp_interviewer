@@ -64,25 +64,26 @@ export default function LandingPage() {
   return (
     <div className="bg-black overflow-x-hidden">
       {/* ── HERO ── */}
-      <section className="relative min-h-screen grid grid-cols-5 px-6 pt-36 pb-24 overflow-hidden">
+      <section className="relative min-h-screen grid grid-cols-1 lg:grid-cols-5 px-6 sm:px-8 pt-28 sm:pt-32 pb-20 overflow-hidden">
         <StarsBackgroundDemo />
 
-        <div className="-rotate-2 col-span-3 flex flex-col items-center justify-center text-center">
+        {/* LEFT CONTENT */}
+        <div className="col-span-full lg:col-span-3 flex flex-col items-center justify-center text-center lg:-rotate-2">
           <Badge variant="gold">Powered by AI — Now in Beta</Badge>
 
-          <h1 className="font-serif relative z-10 text-5xl md:text-6xl lg:text-7xl leading-tight tracking-tighter max-w-4xl">
+          <h1 className="font-serif relative z-10 text-5xl sm:text-6xl lg:text-7xl tracking-tighter max-w-4xl">
             <GrayTitle>Ace your next interview</GrayTitle>
             <br />
-            <GoldTitle>with real experts</GoldTitle>
+            <GoldTitle>with smart experts</GoldTitle>
           </h1>
 
-          <p className="relative z-10 text-base md:text-lg text-stone-400 font-light max-w-xl mt-6 leading-relaxed">
+          <p className="relative z-10 text-sm sm:text-base md:text-lg text-stone-400 font-light max-w-xl mt-5 sm:mt-6 leading-relaxed">
             Book 1:1 mock interviews with senior engineers from top companies.
             Get AI-powered feedback, role-specific questions, and the confidence
             to land your dream job.
           </p>
 
-          <div className="relative z-10 flex flex-wrap items-center justify-center gap-4 mt-10">
+          <div className="relative z-10 flex items-center justify-center gap-3 sm:gap-4 mt-8 sm:mt-10 w-full sm:w-auto">
             <Link href="/onboarding">
               <Button variant="gold" size="hero">
                 Get started
@@ -96,14 +97,14 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          <div className="relative z-10 flex flex-wrap items-center justify-center gap-4 mt-16">
+          <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-12 sm:mt-16">
             <div className="flex">
               {AVATARS.map((av, i) => (
                 <div
                   key={i}
-                  className={`w-8 h-8 rounded-full border-2 border-[#0a0a0b] bg-linear-to-br ${
+                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-[#0a0a0b] bg-linear-to-br ${
                     av.c
-                  } flex items-center justify-center text-xs font-semibold ${
+                  } flex items-center justify-center text-[10px] sm:text-xs font-semibold ${
                     i > 0 ? "-ml-2" : ""
                   }`}
                 >
@@ -111,7 +112,8 @@ export default function LandingPage() {
                 </div>
               ))}
             </div>
-            <p className="text-sm text-stone-500">
+
+            <p className="text-xs sm:text-sm text-stone-500 text-center sm:text-left">
               <strong className="text-stone-400 font-medium">
                 2,400+ engineers
               </strong>{" "}
@@ -120,7 +122,17 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="col-span-2 flex items-center justify-start rotate-3">
+        {/* RIGHT IMAGE */}
+        <div className="col-span-full lg:col-span-2 flex items-center justify-center lg:justify-start mt-12 lg:mt-0 lg:rotate-3">
+          {/* <Image
+            src="/hero.png"
+            alt="Hero illustration"
+            width={600}
+            height={400}
+            className="w-full max-w-md sm:max-w-lg lg:max-w-none h-auto"
+            priority
+          /> */}
+
           <CodeDemo duration={30000} writing />
         </div>
       </section>

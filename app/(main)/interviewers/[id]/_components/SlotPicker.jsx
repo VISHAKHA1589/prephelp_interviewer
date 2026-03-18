@@ -135,7 +135,7 @@ export default function SlotPicker({
 
   useEffect(() => {
     if (data?.success && data.streamCallId) {
-      router.push(`/call/${data.streamCallId}`);
+      router.push(`/appointments`);
     }
   }, [data, router]);
 

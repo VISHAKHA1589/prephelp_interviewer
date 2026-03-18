@@ -109,7 +109,6 @@ export default function PricingSection() {
               <CheckoutButton
                 planId={plan.planId}
                 planPeriod="month"
-                newSubscriptionRedirectUrl={window.location.pathname}
                 checkoutProps={{
                   appearance: {
                     elements: {

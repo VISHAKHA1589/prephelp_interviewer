@@ -13,15 +13,11 @@ import {
   useCallStateHooks,
   useCall,
   CallingState,
-  ToggleAudioPublishingButton,
-  ToggleVideoPublishingButton,
-  ScreenShareButton,
-  CancelCallButton,
+  CallControls,
 } from "@stream-io/video-react-sdk";
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 
 // Stream Chat
-import { StreamChat } from "stream-chat";
 import {
   Chat,
   Channel,
@@ -35,17 +31,7 @@ import "stream-chat-react/dist/css/v2/index.css";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GrayTitle } from "@/components/reusables";
-import {
-  Mic,
-  Video,
-  Monitor,
-  PhoneOff,
-  MessageSquare,
-  Sparkles,
-  Circle,
-  StopCircle,
-  Loader2,
-} from "lucide-react";
+import { MessageSquare, Sparkles, Loader2 } from "lucide-react";
 
 // ─── AI Question Generator ────────────────────────────────────────────────────
 
@@ -161,80 +147,6 @@ function AIQuestionsPanel({ categories }) {
   );
 }
 
-// ─── Recording Button ─────────────────────────────────────────────────────────
-
-function RecordingButton() {
-  const call = useCall();
-  const { useIsCallRecordingInProgress } = useCallStateHooks();
-  const isRecording = useIsCallRecordingInProgress();
-  const [isAwaiting, setIsAwaiting] = useState(false);
-
-  // Clear awaiting state once Stream confirms the flip
-  useEffect(() => {
-    setIsAwaiting(false);
-  }, [isRecording]);
-
-  const toggleRecording = useCallback(async () => {
-    if (!call) return;
-    try {
-      setIsAwaiting(true);
-      if (isRecording) {
-        await call.stopRecording();
-      } else {
-        await call.startRecording();
-      }
-    } catch (err) {
-      console.error("Recording toggle failed:", err);
-      setIsAwaiting(false);
-    }
-  }, [call, isRecording]);
-
-  const busy = isAwaiting;
-  const label = busy ? "…" : isRecording ? "Stop REC" : "Record";
-
-  return (
-    <button
-      type="button"
-      onClick={toggleRecording}
-      disabled={busy}
-      title={isRecording ? "Stop recording" : "Start recording"}
-      className={`flex items-center gap-1.5 text-xs px-3 py-2 rounded-xl border transition-all ${
-        isRecording
-          ? "border-red-500/40 bg-red-500/10 text-red-400 hover:bg-red-500/20"
-          : "border-white/10 text-stone-400 hover:border-white/20 hover:text-stone-200"
-      } disabled:opacity-50 disabled:cursor-not-allowed`}
-    >
-      {busy ? (
-        <Loader2 size={12} className="animate-spin" />
-      ) : isRecording ? (
-        <StopCircle size={12} />
-      ) : (
-        <Circle size={12} className="fill-current" />
-      )}
-      {label}
-      {isRecording && (
-        <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
-      )}
-    </button>
-  );
-}
-
-// ─── Custom Controls Bar ──────────────────────────────────────────────────────
-
-function CallControls({ onLeave }) {
-  return (
-    <div className="flex items-center justify-center gap-3 py-4 px-6 bg-[#0a0a0b] border-t border-white/8">
-      {/* Stream's built-in toggle buttons — they use their own hooks internally */}
-      <ToggleAudioPublishingButton />
-      <ToggleVideoPublishingButton />
-      <ScreenShareButton />
-      <RecordingButton />
-      {/* Leave — CancelCallButton calls call.leave() and triggers onLeave */}
-      <CancelCallButton onLeave={onLeave} />
-    </div>
-  );
-}
-
 // ─── Call UI (inside StreamCall context) ─────────────────────────────────────
 
 function CallUI({
@@ -250,15 +162,14 @@ function CallUI({
   const call = useCall();
   const callingState = useCallCallingState();
 
-  const [activeTab, setActiveTab] = useState("chat"); // "chat" | "ai"
+  const [activeTab, setActiveTab] = useState("chat");
 
-  // Auto-stop recording and leave
+  // Auto-stop recording before leaving
   const handleLeave = useCallback(async () => {
     try {
-      // If recording is still going, stop it before leaving
       if (call) {
-        const state = call.state;
-        if (state?.recording) {
+        const isRecording = call.state?.recording;
+        if (isRecording) {
           await call.stopRecording().catch(() => {});
         }
         await call.leave().catch(() => {});
@@ -268,7 +179,7 @@ function CallUI({
     }
   }, [call, onLeave]);
 
-  // ── Chat client (one token serves both Video + Chat) ──
+  // ── Chat client — same token works for both Video + Chat SDKs ──
   const chatClient = useCreateChatClient({
     apiKey,
     tokenOrProvider: token,
@@ -311,12 +222,9 @@ function CallUI({
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0b] flex flex-col overflow-hidden">
+    <div className="min-h-[90vh] bg-[#0a0a0b] flex flex-col overflow-hidden">
       {/* Top bar */}
       <div className="flex items-center justify-between px-6 py-3 border-b border-white/8 shrink-0">
-        <p className="font-serif text-base tracking-tight">
-          <GrayTitle>MockMate</GrayTitle>
-        </p>
         <div className="flex items-center gap-2">
           <Badge
             variant="outline"
@@ -341,16 +249,14 @@ function CallUI({
       <div className="flex flex-1 min-h-0">
         {/* ── LEFT: Video ── */}
         <div className="flex flex-col flex-1 min-w-0">
-          <div className="flex-1 min-h-0">
-            <StreamTheme>
-              <SpeakerLayout participantBarPosition="bottom" />
-            </StreamTheme>
-          </div>
-          <CallControls onLeave={handleLeave} />
+          <StreamTheme>
+            <SpeakerLayout participantBarPosition="bottom" />
+            <CallControls onLeave={handleLeave} />
+          </StreamTheme>
         </div>
 
         {/* ── RIGHT: Chat / AI panel ── */}
-        <div className="w-[340px] shrink-0 flex flex-col border-l border-white/8 bg-[#0a0a0b]">
+        <div className="w-85 shrink-0 flex flex-col border-l border-white/8 bg-[#0a0a0b]">
           {/* Tab switcher */}
           <div className="flex border-b border-white/8 shrink-0">
             <button
@@ -365,6 +271,7 @@ function CallUI({
               <MessageSquare size={13} />
               Chat
             </button>
+
             {/* AI Questions tab — interviewer only */}
             {isInterviewer && (
               <button
@@ -425,8 +332,13 @@ export default function CallRoom({
   const [videoClient, setVideoClient] = useState(null);
   const [call, setCall] = useState(null);
   const clientRef = useRef(null);
+  const joinedRef = useRef(false);
 
   useEffect(() => {
+    // Guard against React StrictMode double-invoke in development
+    if (joinedRef.current) return;
+    joinedRef.current = true;
+
     const client = new StreamVideoClient({
       apiKey,
       user: {
@@ -452,6 +364,7 @@ export default function CallRoom({
       callInstance.leave().catch(() => {});
       client.disconnectUser().catch(() => {});
       clientRef.current = null;
+      joinedRef.current = false; // reset so hot reload works
     };
   }, [
     apiKey,
