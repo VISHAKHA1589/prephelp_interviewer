@@ -222,7 +222,7 @@ function CallUI({
   }
 
   return (
-    <div className="min-h-[90vh] bg-[#0a0a0b] flex flex-col overflow-hidden">
+    <div className="min-h-[92vh] bg-[#0a0a0b] flex flex-col overflow-hidden">
       {/* Top bar */}
       <div className="flex items-center justify-between px-6 py-3 border-b border-white/8 shrink-0">
         <div className="flex items-center gap-2">
