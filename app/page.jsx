@@ -100,7 +100,7 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          <div className="relative flex items-center justify-center gap-3 sm:gap-4 mt-16">
+          <div className="relative flex items-center justify-center gap-3 sm:gap-4 mt-8 sm:mt-16">
             <div className="flex">
               {AVATARS.map((av, i) => (
                 <div
