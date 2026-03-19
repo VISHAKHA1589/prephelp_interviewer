@@ -67,7 +67,7 @@ export default function LandingPage() {
   return (
     <div className="bg-black overflow-x-hidden">
       {/* HERO */}
-      <section className="relative min-h-screen grid lg:grid-cols-5 px-6 sm:px-8 pt-28 sm:pt-32 pb-20 overflow-hidden">
+      <section className="relative min-h-screen grid grid-cols-1 lg:grid-cols-5 px-3 sm:px-8 pt-28 sm:pt-32 pb-20 overflow-hidden">
         <StarsBackgroundDemo />
 
         {/* LEFT */}
@@ -86,7 +86,7 @@ export default function LandingPage() {
             to land your dream job.
           </p>
 
-          <div className="relative flex justify-center gap-4 mt-10 sm:w-auto">
+          <div className="relative flex justify-center gap-2 sm:gap-4 mt-10 sm:w-auto">
             <Link href="/onboarding">
               <Button variant="gold" size="hero">
                 Get started
@@ -100,7 +100,7 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          <div className="relative flex items-center justify-center gap-4 mt-16">
+          <div className="relative flex items-center justify-center gap-3 sm:gap-4 mt-16">
             <div className="flex">
               {AVATARS.map((av, i) => (
                 <div
