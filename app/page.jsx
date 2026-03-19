@@ -343,11 +343,19 @@ export default function LandingPage() {
             Join thousands of engineers already levelling up on Prept.
           </p>
 
-          <Link href="/onboarding" className="relative">
-            <Button variant="gold" size="hero">
-              Get started
-            </Button>
-          </Link>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <Link href="/onboarding" className="relative">
+              <Button variant="gold" size="hero">
+                Get started
+              </Button>
+            </Link>
+
+            <Link href="/explore" className="relative">
+              <Button variant="outline" size="hero">
+                Browse Interviewers →
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
     </div>
