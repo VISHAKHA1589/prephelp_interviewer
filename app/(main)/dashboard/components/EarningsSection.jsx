@@ -20,6 +20,7 @@ import { GrayTitle } from "@/components/reusables";
 import { requestWithdrawal } from "@/actions/dashboard";
 import useFetch from "@/hooks/use-fetch";
 import { CircleCheck, TrendingUp, Wallet } from "lucide-react";
+import { formatDate } from "@/lib/helpers";
 
 const PAYMENT_METHODS = [
   { value: "PAYPAL", label: "PayPal", placeholder: "your@paypal.com" },
@@ -32,14 +33,6 @@ const PAYMENT_METHODS = [
 ];
 
 const PLATFORM_FEE = 0.2;
-
-function formatDate(iso) {
-  return new Date(iso).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
 
 export default function EarningsSection({ stats, history }) {
   const [open, setOpen] = useState(false);

@@ -1,6 +1,5 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { db } from "@/lib/prisma";
 import Link from "next/link";
 import { getIntervieweeAppointments } from "@/actions/appointments";
 import { AppointmentCard } from "@/components/AppointmentCard";

@@ -8,14 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { CATEGORIES, CATEGORY_LABEL } from "@/lib/data";
-
-function formatTime(iso) {
-  return new Date(iso).toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-}
+import { formatTime } from "@/lib/helpers";
 
 function InterviewerCard({ interviewer }) {
   const {

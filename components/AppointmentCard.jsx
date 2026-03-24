@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, Video, Sparkles } from "lucide-react";
 import { FeedbackModal } from "./FeedbackModal";
+import { formatDate, formatDuration, formatTime } from "@/lib/helpers";
 
 const STATUS_STYLES = {
   SCHEDULED: "border-blue-500/20 bg-blue-500/10 text-blue-400",
@@ -27,30 +28,6 @@ const RATING_LABEL = {
   GOOD: "Good",
   EXCELLENT: "Excellent",
 };
-
-function formatDate(iso) {
-  return new Date(iso).toLocaleDateString("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
-function formatTime(iso) {
-  return new Date(iso).toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-}
-
-function formatDuration(start, end) {
-  const diff = (new Date(end) - new Date(start)) / 60000;
-  const h = Math.floor(diff / 60);
-  const m = diff % 60;
-  return h > 0 ? `${h}h${m > 0 ? ` ${m}m` : ""}` : `${m}m`;
-}
 
 export function AppointmentCard({ booking, mode }) {
   const [feedbackOpen, setFeedbackOpen] = useState(false);

@@ -9,6 +9,7 @@ import { bookSlot } from "@/actions/booking";
 import useFetch from "@/hooks/use-fetch";
 import PricingSection from "@/components/PricingSection";
 import UpgradeModal from "@/components/UpgradeModal";
+import { formatDateFull, formatTime } from "@/lib/helpers";
 
 const SLOT_DURATION_MINUTES = 45;
 const DAYS_AHEAD = 7;
@@ -60,14 +61,6 @@ function generateSlots(date, availStartTime, availEndTime, bookedSlots) {
   return slots;
 }
 
-function formatTime(date) {
-  return date.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-}
-
 function formatDateTab(date) {
   const today = new Date();
   const tomorrow = new Date(today);
@@ -96,15 +89,6 @@ function formatDateTab(date) {
       day: "numeric",
     }),
   };
-}
-
-function formatDateFull(date) {
-  return date.toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
 }
 
 export default function SlotPicker({
