@@ -7,18 +7,18 @@ export const completeOnboarding = async (data) => {
   const user = await currentUser();
 
   if (!user) {
-    return { error: "Unauthorized" };
+    throw new Error("Unauthorized");
   }
 
   const { role, title, company, yearsExp, bio, categories } = data;
 
   if (!role || !["INTERVIEWEE", "INTERVIEWER"].includes(role)) {
-    return { error: "Invalid role" };
+    throw new Error("Invalid role");
   }
 
   if (role === "INTERVIEWER") {
     if (!title || !company || !yearsExp || !bio || !categories?.length) {
-      return { error: "Please fill in all required fields" };
+      throw new Error("Please fill in all required fields");
     }
   }
 
@@ -40,6 +40,6 @@ export const completeOnboarding = async (data) => {
     return { success: true };
   } catch (error) {
     console.error("Onboarding error:", error);
-    return { error: "Something went wrong. Please try again." };
+    throw new Error("Something went wrong. Please try again.");
   }
 };
