@@ -10,41 +10,7 @@ import { StarsBackgroundDemo } from "@/components/demo-components-backgrounds-st
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-
-const CATEGORY_LABEL = {
-  FRONTEND: "Frontend",
-  BACKEND: "Backend",
-  FULLSTACK: "Full Stack",
-  DSA: "DSA",
-  SYSTEM_DESIGN: "System Design",
-  BEHAVIORAL: "Behavioral",
-  DEVOPS: "DevOps",
-  MOBILE: "Mobile",
-};
-
-const EXPECT_ITEMS = [
-  ["🎥", "HD Video Call", "45-minute session with screen sharing built in."],
-  [
-    "🤖",
-    "AI Question Generator",
-    "Role-specific questions generated live during the interview.",
-  ],
-  [
-    "💬",
-    "Persistent Chat",
-    "Message before and after — share notes, resources, follow-ups.",
-  ],
-  [
-    "📊",
-    "AI Feedback Report",
-    "Post-interview analysis covering technical depth, communication, and more.",
-  ],
-  [
-    "📹",
-    "Recording & Playback",
-    "A shareable recording link is generated automatically after the call.",
-  ],
-];
+import { CATEGORY_LABEL, EXPECT_ITEMS } from "@/lib/data";
 
 export default async function InterviewerProfilePage({ params }) {
   const { id } = await params;
