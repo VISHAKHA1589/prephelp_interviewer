@@ -44,18 +44,18 @@ export const getInterviewerProfile = async (interviewerId) => {
     return interviewer ?? null;
   } catch (err) {
     console.error("getInterviewerProfile error:", err);
-    return null;
+    throw new Error("Failed to fetch interviewer profile");
   }
 };
 
 export const bookSlot = async ({ interviewerId, startTime, endTime }) => {
   const user = await currentUser();
-  if (!user) return { error: "Unauthorized" };
+  if (!user) throw new Error("Unauthorized");
 
   // ── Arcjet rate limit ──────────────────────────────────────────────────────
   const req = await request();
   const rateLimitError = await checkRateLimit(bookingLimiter, req, user.id);
-  if (rateLimitError) return { error: rateLimitError };
+  if (rateLimitError) throw new Error(rateLimitError);
   // ──────────────────────────────────────────────────────────────────────────
 
   const [dbUser, interviewer] = await Promise.all([
@@ -64,14 +64,14 @@ export const bookSlot = async ({ interviewerId, startTime, endTime }) => {
   ]);
 
   if (!dbUser || dbUser.role !== "INTERVIEWEE")
-    return { error: "Only interviewees can book sessions" };
+    throw new Error("Only interviewees can book sessions");
   if (!interviewer || interviewer.role !== "INTERVIEWER")
-    return { error: "Interviewer not found" };
+    throw new Error("Interviewer not found");
 
   const credits = interviewer.creditRate ?? 10;
 
   if (dbUser.credits < credits)
-    return { error: "Insufficient credits. Please upgrade your plan." };
+    throw new Error("Insufficient credits. Please upgrade your plan.");
 
   // Check slot isn't already taken
   const conflict = await db.booking.findFirst({
@@ -83,7 +83,7 @@ export const bookSlot = async ({ interviewerId, startTime, endTime }) => {
     },
   });
   if (conflict)
-    return { error: "This slot was just booked. Please pick another." };
+    throw new Error("This slot was just booked. Please pick another.");
 
   // ── Create Stream call ─────────────────────────────────────────────────────
   let streamCallId;
@@ -135,7 +135,7 @@ export const bookSlot = async ({ interviewerId, startTime, endTime }) => {
     });
   } catch (err) {
     console.error("Stream call creation failed:", err);
-    return { error: "Failed to create video call. Please try again." };
+    throw new Error("Failed to create video call. Please try again.");
   }
 
   try {
@@ -179,6 +179,6 @@ export const bookSlot = async ({ interviewerId, startTime, endTime }) => {
     return { success: true, bookingId: booking.id, streamCallId };
   } catch (err) {
     console.error("bookSlot transaction failed:", err);
-    return { error: "Booking failed. Please try again." };
+    throw new Error("Booking failed. Please try again.");
   }
 };
