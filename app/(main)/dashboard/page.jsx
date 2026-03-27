@@ -25,6 +25,8 @@ export default async function InterviewerDashboardPage() {
       getAvailability(),
       getInterviewerAppointments(),
       getInterviewerStats(),
+
+      // Assignment
       getWithdrawalHistory(),
     ]);
 
