@@ -179,26 +179,25 @@ export function AppointmentCard({ booking, mode, isPast = false }) {
               </Button>
             )}
 
-            {feedback &&
-              (has({ plan: "starter" }) || has({ plan: "pro" }))(
-                <>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="gap-1.5 border-amber-400/20 text-amber-400 hover:bg-amber-400/10 hover:border-amber-400/40"
-                    onClick={() => setFeedbackOpen(true)}
-                  >
-                    <Sparkles size={12} />
-                    Full Feedback
-                  </Button>
-                  <Badge
-                    variant="outline"
-                    className={RATING_STYLES[feedback.overallRating]}
-                  >
-                    ✦ {RATING_LABEL[feedback.overallRating]} performance
-                  </Badge>
-                </>
-              )}
+            {feedback && (has({ plan: "starter" }) || has({ plan: "pro" })) && (
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5 border-amber-400/20 text-amber-400 hover:bg-amber-400/10 hover:border-amber-400/40"
+                  onClick={() => setFeedbackOpen(true)}
+                >
+                  <Sparkles size={12} />
+                  Full Feedback
+                </Button>
+                <Badge
+                  variant="outline"
+                  className={RATING_STYLES[feedback.overallRating]}
+                >
+                  ✦ {RATING_LABEL[feedback.overallRating]} performance
+                </Badge>
+              </>
+            )}
           </div>
         )}
       </article>

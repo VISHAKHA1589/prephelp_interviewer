@@ -1,37 +1,25 @@
 "use client";
 
 import { useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import { Sparkles, Loader2 } from "lucide-react";
 import { CATEGORY_LABEL } from "@/lib/data";
+import { generateInterviewQuestions } from "@/actions/aiQuestions";
+import useFetch from "@/hooks/use-fetch";
 
 export default function AIQuestionsPanel({ categories }) {
-  const [questions, setQuestions] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(
     categories?.[0] ?? null
   );
 
-  const generateQuestions = async () => {
-    if (!selectedCategory) return;
-    setLoading(true);
-    try {
-      const res = await fetch("/api/generate-questions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ category: selectedCategory }),
-      });
-      const data = await res.json();
-      if (data.questions) {
-        setQuestions(data.questions);
-      }
-    } catch (err) {
-      console.error("Failed to generate questions:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    data,
+    loading,
+    error,
+    fn: generateFn,
+  } = useFetch(generateInterviewQuestions);
+
+  const questions = data?.questions ?? [];
 
   return (
     <div className="flex flex-col gap-4 h-full overflow-hidden">
@@ -57,7 +45,7 @@ export default function AIQuestionsPanel({ categories }) {
         variant="gold"
         size="sm"
         disabled={loading || !selectedCategory}
-        onClick={generateQuestions}
+        onClick={() => generateFn({ category: selectedCategory })}
         className="self-start gap-2"
       >
         {loading ? (
@@ -72,6 +60,10 @@ export default function AIQuestionsPanel({ categories }) {
           </>
         )}
       </Button>
+
+      {error && (
+        <p className="text-xs text-red-400">{error?.message || error}</p>
+      )}
 
       {/* Questions list */}
       {questions.length > 0 ? (
