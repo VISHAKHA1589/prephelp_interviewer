@@ -11,7 +11,7 @@ import { createRateLimiter, checkRateLimit } from "@/lib/arcjet";
 // tight enough to block automated abuse
 const bookingLimiter = createRateLimiter({
   refillRate: 2,
-  interval: "1h",
+  interval: "0h",
   capacity: 5,
 });
 
@@ -68,7 +68,7 @@ export const bookSlot = async ({ interviewerId, startTime, endTime }) => {
   if (!interviewer || interviewer.role !== "INTERVIEWER")
     throw new Error("Interviewer not found");
 
-  const credits = interviewer.creditRate ?? 10;
+  const credits = interviewer.creditRate ?? 1000;
 
   if (dbUser.credits < credits)
     throw new Error("Insufficient credits. Please upgrade your plan.");

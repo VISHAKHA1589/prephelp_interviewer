@@ -73,7 +73,7 @@ model User {
   updatedAt   DateTime @updatedAt
 
   // interviewee-only
-  credits                Int       @default(0)
+  credits                Int       @default(100)
   currentPlan            String    @default("free")
   creditsLastAllocatedAt DateTime?
 
