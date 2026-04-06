@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
-import PricingSection from "@/components/PricingSection";
+
 
 function MockUI({ rows = 3 }) {
   const widths = ["w-4/5", "w-3/5", "w-2/5", "w-4/5", "w-1/2"];
@@ -67,11 +67,11 @@ export default function LandingPage() {
   return (
     <div className="bg-black overflow-x-hidden">
       {/* HERO */}
-      <section className="relative min-h-screen grid grid-cols-1 lg:grid-cols-5 px-4 sm:px-8 pt-28 sm:pt-32 pb-20 overflow-hidden">
+   <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-8 pt-20 overflow-hidden">
         <StarsBackgroundDemo />
 
         {/* LEFT */}
-        <div className="col-span-full lg:col-span-3 flex flex-col items-center justify-center text-center lg:-rotate-2">
+        <div className="flex flex-col items-center justify-center text-center lg:-rotate-2">
          
 
           <h1 className="font-serif relative text-5xl sm:text-6xl lg:text-7xl tracking-tighter max-w-4xl">
@@ -100,68 +100,9 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          <div className="relative flex items-center justify-center gap-3 sm:gap-4 mt-8 sm:mt-16">
-            <div className="flex">
-              {AVATARS.map((av, i) => (
-                <div
-                  key={i}
-                  className={`w-8 h-8 rounded-full border-2 border-[#0a0a0b] overflow-hidden ${
-                    i > 0 ? "-ml-2" : ""
-                  }`}
-                >
-                  <Image
-                    src={av.src}
-                    alt="user avatar"
-                    width={32}
-                    height={32}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
 
-            <p className="text-sm text-stone-500 text-center sm:text-left">
-              <strong className="text-stone-400 font-medium">
-                2,400+ engineers
-              </strong>{" "}
-              cracked FAANG interviews via Prept
-            </p>
-          </div>
         </div>
-
-        {/* RIGHT */}
-        <div className="col-span-full lg:col-span-2 flex items-center justify-center lg:justify-start mt-12 lg:mt-0 lg:rotate-3">
-          {/* <Image
-            src="/hero.png"
-            alt="Hero illustration"
-            width={600}
-            height={400}
-            className="w-full max-w-md sm:max-w-lg lg:max-w-none h-auto"
-            priority
-          /> */}
-
-          <CodeDemo duration={30000} writing />
-        </div>
-      </section>
-
-      {/* LOGOS */}
-      <section className="relative z-10 border-y border-white/10 py-14">
-        <p className="text-center text-xs font-medium text-stone-600 tracking-widest uppercase mb-8">
-          Interviewees landed roles at
-        </p>
-
-        <div className="flex flex-wrap items-center justify-center gap-24 px-6">
-          {LOGOS.map((l) => (
-            <Image
-              key={l.alt}
-              src={l.src}
-              alt={l.alt}
-              width={50}
-              height={50}
-              className="h-6 w-auto opacity-60 grayscale"
-            />
-          ))}
-        </div>
+      
       </section>
 
       {/* FEATURES */}
@@ -312,21 +253,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* PRICING */}
-      <section className="relative z-10 pb-28 max-w-5xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <SectionLabel>Pricing</SectionLabel>
-          <SectionHeading
-            gray="Simple, transparent"
-            gold="credit-based plans"
-          />
-          <p className="text-stone-400 mt-3 text-sm">
-            Each credit = one session. Unused credits roll over.
-          </p>
-        </div>
-
-        <PricingSection />
-      </section>
+  
 
       {/* CTA */}
       <section className="relative z-10 pb-28 max-w-5xl mx-auto px-6">

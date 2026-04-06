@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import PricingSection from "./PricingSection";
+
 import { AlertCircle } from "lucide-react";
 
 export default function UpgradeModal({ open, onOpenChange, reason }) {
@@ -30,9 +30,9 @@ export default function UpgradeModal({ open, onOpenChange, reason }) {
           </div>
         </DialogHeader>
 
-        {/* PricingSection or any children slot in here */}
+        
         <div className="px-2 pb-6">
-          <PricingSection />
+          
         </div>
       </DialogContent>
     </Dialog>

@@ -4,7 +4,7 @@ export const GrayTitle = ({ children }) => (
   </span>
 );
 export const GoldTitle = ({ children }) => (
-  <span className="bg-linear-to-br from-amber-300 via-amber-400 to-amber-600 bg-clip-text text-transparent">
+  <span className="bg-linear-to-br from-red-300 via-red-400 to-red-600 bg-clip-text text-transparent">
     {children}
   </span>
 );
@@ -35,7 +35,7 @@ export default function PageHeader({ label, gray, gold, description, right }) {
             {gold && <GoldTitle>{gold}</GoldTitle>}
           </h1>
           {description && (
-            <p className="text-sm text-stone-500 font-light mt-2">
+            <p className="text-sm text-stone-500 from-red-300 via-red-400 to-red-600 font-light mt-2">
               {description}
             </p>
           )}
