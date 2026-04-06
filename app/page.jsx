@@ -132,27 +132,7 @@ export default function LandingPage() {
             </BentoCard>
           </div>
 
-          <div className="col-span-12 md:col-span-5">
-            <BentoCard
-              icon={<Wallet size={16} className="text-amber-400" />}
-              title={<GrayTitle>Credit System</GrayTitle>}
-              desc="Subscribe for monthly credits. Book sessions. Interviewers earn and withdraw any time."
-            >
-              <div className="mt-5 rounded-xl bg-[#141417] border border-white/10 p-5 flex justify-between items-end">
-                <div>
-                  <p className="text-xs text-stone-600 mb-1">Your balance</p>
-                  <p className="font-serif text-4xl leading-none bg-linear-to-br from-amber-300 to-amber-500 bg-clip-text text-transparent">
-                    28
-                  </p>
-                  <p className="text-xs text-stone-600 mt-1">
-                    credits remaining
-                  </p>
-                </div>
-
-                <Badge variant="secondary">+10 this month</Badge>
-              </div>
-            </BentoCard>
-          </div>
+      
 
           <div className="col-span-12 md:col-span-4">
             <BentoCard
@@ -172,13 +152,6 @@ export default function LandingPage() {
             />
           </div>
 
-          <div className="col-span-12 md:col-span-4">
-            <BentoCard
-              icon="🔒"
-              title="Security by Arcjet"
-              desc="Bot protection, rate limiting, and abuse prevention baked into every API route."
-            />
-          </div>
 
           <div className="col-span-12 md:col-span-6">
             <BentoCard
